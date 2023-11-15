@@ -30,6 +30,9 @@ local plugins = {
   {
 "nvim-treesitter/nvim-treesitter",
     opts = overrides.treesitter,
+    dependencies =  {
+      'JoosepAlviste/nvim-ts-context-commentstring',
+    },
   },
 
   {
@@ -61,31 +64,33 @@ local plugins = {
   -- }
   {
     "majutsushi/tagbar",
-    dev = false,
     enabled = true,
     version = "*",
     keys = {
       { "<C-T>", "<cmd>TagbarToggle<cr>", desc = "Toggle Tagbar" },
       { "<C-X>", "<cmd>TagbarClose<cr>", desc = "Toggle Close" },
-    }
+    },
+    lazy = true,
   },
    {
     "tpope/vim-surround",
     enabled = true,
     version = "*",
-    lazy = false
-  },
-  {
-   "lewis6991/gitsigns.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim"
-    },
-    enabled = true,
     lazy = false,
-    version = "*"
   },
+  -- {
+  --  "lewis6991/gitsigns.nvim",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim"
+  --   },
+  --   enabled = true,
+  --   lazy = false,
+  --   version = "*"
+  -- },
   {
 	"L3MON4D3/LuaSnip",
+    enabled = true,
+    lazy = true,
     dependencies = "rafamadriz/friendly-snippets",
 	-- follow latest release.
 	version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
@@ -108,6 +113,8 @@ end, {silent = true})
 },
   {
   "rafamadriz/friendly-snippets",
+    enabled = true,
+    lazy = true,
   config = function()
     require("luasnip.loaders.from_vscode").lazy_load()
   end,
@@ -205,7 +212,172 @@ end, {silent = true})
     end
     require("cmp").setup(opts)
   end,
+},
+  {
+  "JoosepAlviste/nvim-ts-context-commentstring",
+  lazy = true,
+    enabled =  true,
+  opts = {
+    enable_aptocmd = false,
+  },
+},
+  {
+  "lewis6991/gitsigns.nvim",
+    enabled = true,
+    lazy = true,
+  opts = {
+    signs = {
+      add = { text = "▎" },
+      change = { text = "▎" },
+      delete = { text = "" },
+      topdelete = { text = "" },
+      changedelete = { text = "▎" },
+      untracked = { text = "▎" },
+    },
+    on_attach = function(buffer)
+      local gs = package.loaded.gitsigns
+
+      local function map(mode, l, r, desc)
+        vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
+      end
+
+      -- stylua: ignore start
+      map("n", "]h", gs.next_hunk, "Next Hunk")
+      map("n", "[h", gs.prev_hunk, "Prev Hunk")
+      map({ "n", "v" }, "<leader>ghs", ":Gitsigns stage_hunk<CR>", "Stage Hunk")
+      map({ "n", "v" }, "<leader>ghr", ":Gitsigns reset_hunk<CR>", "Reset Hunk")
+      map("n", "<leader>ghS", gs.stage_buffer, "Stage Buffer")
+      map("n", "<leader>ghu", gs.undo_stage_hunk, "Undo Stage Hunk")
+      map("n", "<leader>ghR", gs.reset_buffer, "Reset Buffer")
+      map("n", "<leader>ghp", gs.preview_hunk, "Preview Hunk")
+      map("n", "<leader>ghb", function() gs.blame_line({ full = true }) end, "Blame Line")
+      map("n", "<leader>ghd", gs.diffthis, "Diff This")
+      map("n", "<leader>ghD", function() gs.diffthis("~") end, "Diff This ~")
+      map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
+    end,
+  },
+},
+ {
+  "RRethy/vim-illuminate",
+    enabled = true,
+    lazy = true,
+  -- event = "LazyFile",
+  opts = {
+    delay = 200,
+    large_file_cutoff = 2000,
+    large_file_overrides = {
+      providers = { "lsp" },
+    },
+  },
+  config = function(_, opts)
+    require("illuminate").configure(opts)
+
+    local function map(key, dir, buffer)
+      vim.keymap.set("n", key, function()
+        require("illuminate")["goto_" .. dir .. "_reference"](false)
+      end, { desc = dir:sub(1, 1):upper() .. dir:sub(2) .. " Reference", buffer = buffer })
+    end
+
+    map("]]", "next")
+    map("[[", "prev")
+
+    -- also set it after loading ftplugins, since a lot overwrite [[ and ]]
+    vim.api.nvim_create_autocmd("FileType", {
+      callback = function()
+        local buffer = vim.api.nvim_get_current_buf()
+        map("]]", "next", buffer)
+        map("[[", "prev", buffer)
+      end,
+    })
+  end,
+  keys = {
+    { "]]", desc = "Next Reference" },
+    { "[[", desc = "Prev Reference" },
+  },
+},
+  {
+    "folke/todo-comments.nvim",
+      cmd = { "TodoTrouble", "TodoTelescope" },
+    enabled = true,
+    lazy = true,
+    version = "*",
+     config = true,
+     keys = {
+    { "]t", function() require("todo-comments").jump_next() end, desc = "Next todo comment" },
+    { "[t", function() require("todo-comments").jump_prev() end, desc = "Previous todo comment" },
+    { "<leader>xt", "<cmd>TodoTrouble<cr>", desc = "Todo (Trouble)" },
+    { "<leader>xT", "<cmd>TodoTrouble keywords=TODO<cr>", desc = "Todo/Fix/Fixme (Trouble)" },
+    { "<leader>st", "<cmd>TodoTelescope<cr>", desc = "Todo" },
+    { "<leader>sT", "<cmd>TodoTelescope keywords=TODO<cr>", desc = "Todo/Fix/Fixme" },
+  },
+    opts = {
+  signs = true, -- show icons in the signs column
+  sign_priority = 8, -- sign priority
+  -- keywords recognized as todo comments
+  keywords = {
+    FIX = {
+      icon = " ", -- icon used for the sign, and in search results
+      color = "error", -- can be a hex color, or a named color (see below)
+      alt = { "FIXME", "BUG", "FIXIT", "ISSUE" }, -- a set of other keywords that all map to this FIX keywords
+      -- signs = false, -- configure signs for some keywords individually
+    },
+    TODO = { icon = " ", color = "info" },
+    HACK = { icon = " ", color = "warning" },
+    WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
+    PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
+    NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
+    TEST = { icon = "⏲ ", color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
+  },
+  gui_style = {
+    fg = "NONE", -- The gui style to use for the fg highlight group.
+    bg = "BOLD", -- The gui style to use for the bg highlight group.
+  },
+  merge_keywords = true, -- when true, custom keywords will be merged with the defaults
+  -- highlighting of the line containing the todo comment
+  -- * before: highlights before the keyword (typically comment characters)
+  -- * keyword: highlights of the keyword
+  -- * after: highlights after the keyword (todo text)
+  highlight = {
+    multiline = true, -- enable multine todo comments
+    multiline_pattern = "^.", -- lua pattern to match the next multiline from the start of the matched keyword
+    multiline_context = 10, -- extra lines that will be re-evaluated when changing a line
+    before = "", -- "fg" or "bg" or empty
+    keyword = "wide", -- "fg", "bg", "wide", "wide_bg", "wide_fg" or empty. (wide and wide_bg is the same as bg, but will also highlight surrounding characters, wide_fg acts accordingly but with fg)
+    after = "fg", -- "fg" or "bg" or empty
+    pattern = [[.*<(KEYWORDS)\s*:]], -- pattern or table of patterns, used for highlighting (vim regex)
+    comments_only = true, -- uses treesitter to match keywords in comments only
+    max_line_len = 400, -- ignore lines longer than this
+    exclude = {}, -- list of file types to exclude highlighting
+  },
+  -- list of named colors where we try to extract the guifg from the
+  -- list of highlight groups or use the hex color if hl not found as a fallback
+  colors = {
+    error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
+    warning = { "DiagnosticWarn", "WarningMsg", "#FBBF24" },
+    info = { "DiagnosticInfo", "#2563EB" },
+    hint = { "DiagnosticHint", "#10B981" },
+    default = { "Identifier", "#7C3AED" },
+    test = { "Identifier", "#FF00FF" }
+  },
+  search = {
+    command = "rg",
+    args = {
+      "--color=never",
+      "--no-heading",
+      "--with-filename",
+      "--line-number",
+      "--column",
+    },
+    -- regex that will be used to match keywords.
+    -- don't replace the (KEYWORDS) placeholder
+    pattern = [[\b(KEYWORDS):]], -- ripgrep regex
+    -- pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
+  },
 }
- }
+
+  }
+
+   }
+
 
 return plugins
