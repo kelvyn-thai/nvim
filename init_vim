@@ -1,0 +1,4 @@
+" in init.vim
+
+" command! Scratch lua require'tools'.makeScratch()
+
