@@ -1,11 +1,13 @@
 local overrides = require "custom.configs.overrides"
 ---@type NvPluginSpec[]
 local plugins = {
-  -- Override plugin definition options
+  -- nvim-spl-installer
+  {
+    "williamboman/nvim-lsp-installer",
+  },
   {
     "neovim/nvim-lspconfig",
     dependencies = {
-      -- format & linting
       {
         "jose-elias-alvarez/null-ls.nvim",
         config = function()
@@ -19,12 +21,10 @@ local plugins = {
     end, -- Override to setup mason-lspconfig
   },
 
-  -- override plugin configs
+  -- mason.nvim
   {
     "williamboman/mason.nvim",
     opts = overrides.mason,
-    enabled = true,
-    lazy = true,
   },
 
   {
@@ -42,6 +42,7 @@ local plugins = {
 
   -- Install a plugin
   {
+    -- Override plugin definition options
     "max397574/better-escape.nvim",
     event = "InsertEnter",
     config = function()
@@ -476,6 +477,153 @@ local plugins = {
     "roobert/tailwindcss-colorizer-cmp.nvim",
     enabled = true,
     lazy = false,
+  },
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "antoinemadec/FixCursorHold.nvim",
+      "haydenmeade/neotest-jest",
+    },
+    keys = {
+      {
+        "<leader>tl",
+        "<cmd>lua require('neotest').run.run_last()<cr>",
+        desc = "Run Last Test",
+        mode = "n",
+      },
+      -- {
+      --   "<leader>tL",
+      --   function()
+      --     require("neotest").run.run_last { strategy = "dap" }
+      --   end,
+      --   desc = "Debug Last Test",
+      --   mode = "n",
+      -- },
+      {
+        "<leader>tw",
+        "<cmd>lua require('neotest').run.run({ jestCommand = 'jest --watch ' })<cr>",
+        desc = "Run Watch",
+        mode = "n",
+      },
+      {
+        "<leader>tt",
+        function()
+          require("neotest").run.run(vim.fn.expand "%")
+        end,
+        desc = "Run File",
+      },
+      {
+        "<leader>tT",
+        function()
+          require("neotest").run.run(vim.loop.cwd())
+        end,
+        desc = "Run All Test Files",
+      },
+      {
+        "<leader>tr",
+        function()
+          require("neotest").run.run()
+        end,
+        desc = "Run Nearest",
+      },
+      {
+        "<leader>ts",
+        function()
+          require("neotest").summary.toggle()
+        end,
+        desc = "Toggle Summary",
+      },
+      {
+        "<leader>to",
+        function()
+          require("neotest").output.open { enter = true, auto_close = true }
+        end,
+        desc = "Show Output",
+      },
+      {
+        "<leader>tO",
+        function()
+          require("neotest").output_panel.toggle()
+        end,
+        desc = "Toggle Output Panel",
+      },
+      {
+        "<leader>tS",
+        function()
+          require("neotest").run.stop()
+        end,
+        desc = "Stop",
+      },
+    },
+    opts = function(_, opts)
+      opts.adapters = {
+        require "neotest-jest" {
+          jestCommand = "npm test --",
+          jestConfigFile = "custom.jest.config.ts",
+          env = { CI = true },
+          cwd = function(path)
+            return vim.fn.getcwd()
+          end,
+        },
+      }
+    end,
+  },
+  {
+    "MunifTanjim/prettier.nvim",
+    enabled = true,
+    lazy = true,
+    opts = {
+      bin = "prettierd", -- or `'prettierd'` (v0.23.3+)
+      filetypes = {
+        "css",
+        "graphql",
+        "html",
+        "javascript",
+        "javascriptreact",
+        "json",
+        "less",
+        "markdown",
+        "scss",
+        "typescript",
+        "typescriptreact",
+        "yaml",
+      },
+      ["null-ls"] = {
+        condition = function()
+          local prettier = require "prettier"
+          return prettier.config_exists {
+            -- if `false`, skips checking `package.json` for `"prettier"` key
+            check_package_json = true,
+          }
+        end,
+        runtime_condition = function()
+          -- return false to skip running prettier
+          return true
+        end,
+        timeout = 5000,
+      },
+      cli_options = {
+        arrow_parens = "always",
+        bracket_spacing = true,
+        bracket_same_line = false,
+        embedded_language_formatting = "auto",
+        end_of_line = "lf",
+        html_whitespace_sensitivity = "css",
+        -- jsx_bracket_same_line = false,
+        jsx_single_quote = false,
+        print_width = 80,
+        prose_wrap = "preserve",
+        quote_props = "as-needed",
+        semi = true,
+        single_attribute_per_line = false,
+        single_quote = false,
+        tab_width = 2,
+        trailing_comma = "es5",
+        use_tabs = false,
+        vue_indent_script_and_style = false,
+      },
+    },
   },
 }
 

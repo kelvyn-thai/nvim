@@ -1,6 +1,12 @@
+require("nvim-lsp-installer").setup {}
 local on_attach = require("plugins.configs.lspconfig").on_attach
 local capabilities = require("plugins.configs.lspconfig").capabilities
-local lsp_config = require("lspconfig")
+-- IMPORTANT: make sure to setup neodev BEFORE lspconfig
+require("neodev").setup {
+  -- add any options here, or leave empty to use the default settings
+  library = { plugins = { "nvim-dap-ui" }, types = true },
+}
+local lsp_config = require "lspconfig"
 -- if you just want default config for the servers then put them in a table
 local servers = { "html", "cssls", "tsserver", "clangd", "jsonls", "eslint", "tailwindcss" }
 
@@ -11,5 +17,5 @@ for _, lsp in ipairs(servers) do
   }
 end
 
--- 
+--
 -- lspconfig.pyright.setup { blabla}

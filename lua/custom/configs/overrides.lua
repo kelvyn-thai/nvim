@@ -12,6 +12,9 @@ M.treesitter = {
     "c",
     "markdown",
     "markdown_inline",
+    "json",
+    "json5",
+    "jsonc",
   },
   indent = {
     enable = true,
@@ -39,6 +42,7 @@ M.mason = {
     "clangd",
     "clang-format",
   },
+  PATH = "prepend",
 }
 
 -- git support in nvimtree
