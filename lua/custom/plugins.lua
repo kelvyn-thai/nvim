@@ -625,6 +625,13 @@ local plugins = {
       },
     },
   },
+  { "folke/neodev.nvim", opts = {} },
+  {
+    "nvim-lua/plenary.nvim",
+  },
+  {
+    "antoinemadec/FixCursorHold.nvim",
+  },
 }
 
 return plugins
