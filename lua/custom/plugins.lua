@@ -372,7 +372,7 @@ local plugins = {
       merge_keywords = true, -- when true, custom keywords will be merged with the defaults
       -- highlighting of the line containing the todo comment
       -- * before: highlights before the keyword (typically comment characters)
-      -- * keyword: highlights of the keyword
+      -- * keyword: highlights of the keywordconform
       -- * after: highlights after the keyword (todo text)
       highlight = {
         multiline = true, -- enable multine todo comments
@@ -631,6 +631,62 @@ local plugins = {
   },
   {
     "antoinemadec/FixCursorHold.nvim",
+  },
+  {
+    "mfussenegger/nvim-lint",
+    event = "VeryLazy",
+    config = function()
+      require "custom.configs.nvim-lint"
+    end,
+  },
+  {
+    "mfussenegger/nvim-dap",
+  },
+  {
+    "vim-airline/vim-airline",
+  },
+  {
+    "vim-airline/vim-airline-themes",
+  },
+  {
+    "Galooshi/vim-import-js",
+    enabled = true,
+  },
+  {
+    "MunifTanjim/eslint.nvim",
+    config = function(_, opts)
+      require "custom.configs.eslint"
+    end,
+  },
+  {
+    "MattesGroeger/vim-bookmarks",
+    enabled = true,
+    keys = {
+      {
+        "<leader>mm",
+        "<cmd>BookmarkToggle<cr>",
+        mode = "n",
+        desc = "Bookmark Toggle",
+      },
+      {
+        "<leader>ml",
+        "<cmd>BookmarkShowAll<cr>",
+        mode = "n",
+        desc = "Bookmark ShowAll",
+      },
+      {
+        "<leader>mn",
+        "<cmd>BookmarkShowNext<cr>",
+        mode = "n",
+        desc = "Bookmark ShowNext",
+      },
+      {
+        "<leader>mp",
+        "<cmd>BookmarkShowBack<cr>",
+        mode = "n",
+        desc = "Bookmark ShowBack",
+      },
+    },
   },
 }
 

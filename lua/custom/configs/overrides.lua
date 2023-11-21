@@ -37,6 +37,7 @@ M.mason = {
     "deno",
     "prettier",
     "tailwindcss-language-server",
+    "eslint-lsp",
 
     -- c/cpp stuff
     "clangd",
@@ -50,7 +51,6 @@ M.nvimtree = {
   git = {
     enable = true,
   },
-
   renderer = {
     highlight_git = true,
     icons = {
@@ -58,6 +58,12 @@ M.nvimtree = {
         git = true,
       },
     },
+  },
+  filters = {
+    dotfiles = false,
+  },
+  view = {
+    width = 50,
   },
 }
 
