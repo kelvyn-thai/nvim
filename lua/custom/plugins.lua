@@ -651,6 +651,7 @@ local plugins = {
   {
     "Galooshi/vim-import-js",
     enabled = true,
+    lazy = false,
   },
   {
     "MunifTanjim/eslint.nvim",
@@ -686,6 +687,34 @@ local plugins = {
         mode = "n",
         desc = "Bookmark ShowBack",
       },
+    },
+  },
+  {
+    "robitx/gp.nvim",
+    enabled = true,
+    lazy = false,
+    config = function(_, opts)
+      local config = require "custom.configs.gp"
+      require("gp").setup(config)
+      -- require "custom.configs.gp"
+
+      -- or setup with your own config (see Install > Configuration in Readme)
+      -- require("gp").setup(config)
+
+      -- shortcuts might be setup here (see Usage > Shortcuts in Readme)
+    end,
+  },
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    init = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+    end,
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
     },
   },
 }
