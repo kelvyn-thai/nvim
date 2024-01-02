@@ -1,6 +1,7 @@
 # nvchad
 
-nvchad is a Neovim configuration framework designed for simplicity, extensibility, and productivity.
+nvchad is a Neovim configuration framework designed for simplicity,
+extensibility, and productivity.
 
 ## Table of Contents
 
@@ -14,8 +15,10 @@ nvchad is a Neovim configuration framework designed for simplicity, extensibilit
 ## Features
 
 - **Simplicity:** Minimalistic and easy-to-understand configuration.
-- **Extensibility:** Easily add or remove plugins to tailor the configuration to your needs.
-- **Productivity:** Optimized for efficient coding and a smooth editing experience.
+- **Extensibility:** Easily add or remove plugins to tailor the configuration to
+  your needs.
+- **Productivity:** Optimized for efficient coding and a smooth editing
+  experience.
 
 ## Installation
 
@@ -29,4 +32,4 @@ nvchad is a Neovim configuration framework designed for simplicity, extensibilit
 
    ```bash
    git clone https://github.com/your-username/nvchad.git ~/.config/nvim
-
+   ```
