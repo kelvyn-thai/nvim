@@ -689,32 +689,47 @@ local plugins = {
       },
     },
   },
+  -- {
+  --   "robitx/gp.nvim",
+  --   enabled = true,
+  --   lazy = false,
+  --   config = function(_, opts)
+  --     local config = require "custom.configs.gp"
+  --     require("gp").setup(config)
+  --     -- require "custom.configs.gp"
+  --
+  --     -- or setup with your own config (see Install > Configuration in Readme)
+  --     -- require("gp").setup(config)
+  --
+  --     -- shortcuts might be setup here (see Usage > Shortcuts in Readme)
+  --   end,
+  -- },
+  -- {
+  --   "folke/which-key.nvim",
+  --   event = "VeryLazy",
+  --   init = function()
+  --     vim.o.timeout = true
+  --     vim.o.timeoutlen = 300
+  --   end,
+  --   opts = {
+  --     -- your configuration comes here
+  --     -- or leave it empty to use the default settings
+  --     -- refer to the configuration section below
+  --   },
+  -- },
   {
-    "robitx/gp.nvim",
+    "jackMort/ChatGPT.nvim",
+    config = function()
+      require("chatgpt").setup {
+        api_key_cmd = os.getenv "OPENAI_API_KEY",
+      }
+    end,
     enabled = true,
     lazy = false,
-    config = function(_, opts)
-      local config = require "custom.configs.gp"
-      require("gp").setup(config)
-      -- require "custom.configs.gp"
-
-      -- or setup with your own config (see Install > Configuration in Readme)
-      -- require("gp").setup(config)
-
-      -- shortcuts might be setup here (see Usage > Shortcuts in Readme)
-    end,
-  },
-  {
-    "folke/which-key.nvim",
-    event = "VeryLazy",
-    init = function()
-      vim.o.timeout = true
-      vim.o.timeoutlen = 300
-    end,
-    opts = {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
     },
   },
 }
