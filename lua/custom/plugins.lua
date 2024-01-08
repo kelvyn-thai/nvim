@@ -324,28 +324,26 @@ local plugins = {
     "folke/todo-comments.nvim",
     cmd = { "TodoTrouble", "TodoTelescope" },
     enabled = true,
-    lazy = true,
-    version = "*",
-    config = true,
+    lazy = false,
     keys = {
       {
-        "]t",
+        "<leader>s]",
         function()
           require("todo-comments").jump_next()
         end,
         desc = "Next todo comment",
       },
       {
-        "[t",
+        "<leader>s[",
         function()
           require("todo-comments").jump_prev()
         end,
         desc = "Previous todo comment",
       },
-      { "<leader>xt", "<cmd>TodoTrouble<cr>", desc = "Todo (Trouble)" },
-      { "<leader>xT", "<cmd>TodoTrouble keywords=TODO<cr>", desc = "Todo/Fix/Fixme (Trouble)" },
-      { "<leader>st", "<cmd>TodoTelescope<cr>", desc = "Todo" },
-      { "<leader>sT", "<cmd>TodoTelescope keywords=TODO<cr>", desc = "Todo/Fix/Fixme" },
+      { "<leader>sa", "<cmd>TodoTrouble<cr>", desc = "Todo (Trouble)" },
+      { "<leader>sb", "<cmd>TodoTrouble keywords=TODO<cr>", desc = "Todo/Fix/Fixme (Trouble)" },
+      { "<leader>sc", "<cmd>TodoTelescope<cr>", desc = "Todo" },
+      { "<leader>sd", "<cmd>TodoTelescope keywords=TODO<cr>", desc = "Todo/Fix/Fixme" },
     },
     opts = {
       signs = true, -- show icons in the signs column
