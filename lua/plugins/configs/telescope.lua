@@ -48,7 +48,6 @@ local options = {
       n = { ["q"] = require("telescope.actions").close },
     },
   },
-
   extensions_list = { "themes", "terms", "fzf" },
   extensions = {
     fzf = {
@@ -56,6 +55,12 @@ local options = {
       override_generic_sorter = true,
       override_file_sorter = true,
       case_mode = "smart_case",
+    },
+  },
+  pickers = {
+    find_files = {
+      find_command = { "rg", "--ignore", "--hidden", "--files" },
+      prompt_prefix = "🔍 ",
     },
   },
 }
