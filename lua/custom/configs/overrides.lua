@@ -65,6 +65,9 @@ M.nvimtree = {
   view = {
     width = 50,
   },
+  trash = {
+    cmd = "trash",
+  },
 }
 
 return M
