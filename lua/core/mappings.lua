@@ -42,8 +42,6 @@ M.general = {
     ["<Up>"] = { 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', "Move up", opts = { expr = true } },
     ["<Down>"] = { 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', "Move down", opts = { expr = true } },
 
-    -- new buffer
-    ["<leader>b"] = { "<cmd> enew <CR>", "New buffer" },
     ["<leader>ch"] = { "<cmd> NvCheatsheet <CR>", "Mapping cheatsheet" },
 
     ["<leader>fm"] = {
@@ -78,15 +76,18 @@ M.tabufline = {
   plugin = true,
 
   n = {
+    -- new buffer
+    ["<leader><tab>t"] = { "<cmd> enew <CR>", "New buffer" },
+
     -- cycle through buffers
-    ["<tab>"] = {
+    ["<leader><tab>n"] = {
       function()
         require("nvchad.tabufline").tabuflineNext()
       end,
       "Goto next buffer",
     },
 
-    ["<S-tab>"] = {
+    ["<leader><tab>p"] = {
       function()
         require("nvchad.tabufline").tabuflinePrev()
       end,
@@ -94,11 +95,23 @@ M.tabufline = {
     },
 
     -- close buffer + hide terminal buffer
-    ["<leader>x"] = {
+    ["<leader><tab>x"] = {
       function()
         require("nvchad.tabufline").close_buffer()
       end,
       "Close buffer",
+    },
+
+    ["<leader><tab>qa"] = {
+      function()
+        local confirm = vim.fn.input "Do you really want to close all buffers? (y/n): "
+        if confirm == "y" or confirm == "Y" then
+          vim.cmd "%bd|e#"
+        else
+          print "Buffers not closed."
+        end
+      end,
+      "Close all buffers (Auto save)",
     },
   },
 }
