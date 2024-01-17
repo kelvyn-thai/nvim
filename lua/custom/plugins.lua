@@ -730,6 +730,18 @@ local plugins = {
       "nvim-telescope/telescope.nvim",
     },
   },
+  {
+    "antosha417/nvim-lsp-file-operations",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-tree.lua",
+    },
+    enabled = true,
+    lazy = false,
+    config = function()
+      require("lsp-file-operations").setup()
+    end,
+  },
 }
 
 return plugins
