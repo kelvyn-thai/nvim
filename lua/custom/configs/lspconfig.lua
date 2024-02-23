@@ -8,7 +8,17 @@ require("neodev").setup {
 }
 local lsp_config = require "lspconfig"
 -- if you just want default config for the servers then put them in a table
-local servers = { "html", "cssls", "tsserver", "clangd", "jsonls", "eslint", "tailwindcss" }
+local servers = {
+  "html",
+  "cssls",
+  "tsserver",
+  "clangd",
+  "jsonls",
+  "eslint",
+  "tailwindcss",
+  "dockerls",
+  "docker_compose_language_service",
+}
 
 for _, lsp in ipairs(servers) do
   lsp_config[lsp].setup {

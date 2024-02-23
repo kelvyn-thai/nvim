@@ -92,7 +92,6 @@ local plugins = {
   {
     "tpope/vim-surround",
     enabled = true,
-    version = "*",
     lazy = false,
   },
   -- {
@@ -741,6 +740,30 @@ local plugins = {
     config = function()
       require("lsp-file-operations").setup()
     end,
+  },
+  {
+    "nvim-pack/nvim-spectre",
+    enabled = true,
+    lazy = false,
+    keys = {
+      { "<leader>se", '<cmd>lua require("spectre").toggle()<CR>', desc = "Toggle Spectre" },
+      {
+        "<leader>sf",
+        '<cmd>lua require("spectre").open_visual({select_word=true})<CR>',
+        desc = "Search current word (normal)",
+      },
+      {
+        "<leader>sg",
+        '<esc><cmd>lua require("spectre").open_visual()<CR>',
+        desc = "Search current word (visual)",
+        mode = "v",
+      },
+      {
+        "<leader>sh",
+        '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>',
+        desc = "Search on current file",
+      },
+    },
   },
 }
 

@@ -22,7 +22,6 @@ M.general = {
     ["<C-l>"] = { "<C-w>l", "Window right" },
     ["<C-j>"] = { "<C-w>j", "Window down" },
     ["<C-k>"] = { "<C-w>k", "Window up" },
-
     -- save
     ["<C-s>"] = { "<cmd> w <CR>", "Save file" },
 
@@ -106,7 +105,7 @@ M.tabufline = {
       function()
         local confirm = vim.fn.input "Do you really want to close all buffers? (y/n): "
         if confirm == "y" or confirm == "Y" then
-          vim.cmd "%bd|e#"
+          vim.cmd "%bd|e#!"
         else
           print "Buffers not closed."
         end
@@ -416,7 +415,6 @@ M.blankline = {
 
 M.gitsigns = {
   plugin = true,
-
   n = {
     -- Navigation through hunks
     ["]c"] = {
@@ -432,7 +430,6 @@ M.gitsigns = {
       "Jump to next hunk",
       opts = { expr = true },
     },
-
     ["[c"] = {
       function()
         if vim.wo.diff then
@@ -461,7 +458,6 @@ M.gitsigns = {
       end,
       "Preview hunk",
     },
-
     ["<leader>gb"] = {
       function()
         package.loaded.gitsigns.blame_line()

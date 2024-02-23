@@ -42,6 +42,8 @@ M.mason = {
     -- c/cpp stuff
     "clangd",
     "clang-format",
+
+    "dockerfile-language-server",
   },
   PATH = "prepend",
 }
