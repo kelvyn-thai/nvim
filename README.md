@@ -33,3 +33,5 @@ extensibility, and productivity.
    ```bash
    git clone https://github.com/your-username/nvchad.git ~/.config/nvim
    ```
+
+This is commit from master brach!
