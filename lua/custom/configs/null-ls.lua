@@ -4,21 +4,19 @@ local b = null_ls.builtins
 local group = vim.api.nvim_create_augroup("lsp_format_on_save", { clear = false })
 local event = "BufWritePre" -- or "BufWritePost"
 local async = event == "BufWritePost"
-
-local sources = {
-  -- webdev stuff
-  b.formatting.deno_fmt, -- choosed deno for ts/js files cuz its very fast!
-  b.formatting.prettier.with { filetypes = { "html", "markdown", "css" } }, -- so prettier works only on these filetype
-  b.formatting.prettier,
-  -- Lua
-  b.formatting.stylua,
-  -- cpp
-  b.formatting.clang_format,
-}
+--
+-- local sources = {
+--   -- webdev stuff
+--   b.formatting.deno_fmt, -- Ensure Deno is set for TS/JS
+--   b.formatting.prettier.with { filetypes = { "html", "markdown", "css" }, extra_args = { "--single-quote" } }, -- so prettier works only on these filetype
+--   b.formatting.prettier,
+--   -- Lua
+--   b.formatting.stylua,
+--   -- cpp
+--   b.formatting.clang_format,
+-- }
 
 null_ls.setup {
-  debug = true,
-  sources = sources,
   on_attach = function(client, bufnr)
     if client.supports_method "textDocument/formatting" then
       vim.keymap.set("n", "<Leader>fm", function()
