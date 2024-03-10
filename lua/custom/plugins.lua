@@ -569,7 +569,7 @@ local plugins = {
   {
     "MunifTanjim/prettier.nvim",
     enabled = true,
-    lazy = true,
+    lazy = false,
     opts = {
       bin = "prettierd", -- or `'prettierd'` (v0.23.3+)
       filetypes = {
@@ -585,6 +585,7 @@ local plugins = {
         "typescript",
         "typescriptreact",
         "yaml",
+        "lua",
       },
       ["null-ls"] = {
         condition = function()
@@ -764,6 +765,11 @@ local plugins = {
         desc = "Search on current file",
       },
     },
+  },
+  {
+    "tpope/vim-fugitive",
+    lazy = false,
+    enabled = true,
   },
 }
 
