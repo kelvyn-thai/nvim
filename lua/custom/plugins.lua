@@ -771,6 +771,7 @@ local plugins = {
     lazy = false,
     enabled = true,
   },
+  { "akinsho/git-conflict.nvim", version = "*", config = true, lazy = false, enabled = true },
 }
 
 return plugins
