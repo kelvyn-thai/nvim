@@ -37,6 +37,8 @@ local plugins = {
 
   {
     "nvim-tree/nvim-tree.lua",
+    enabled = true,
+    lazy = true,
     opts = overrides.nvimtree,
   },
 
@@ -94,15 +96,6 @@ local plugins = {
     enabled = true,
     lazy = false,
   },
-  -- {
-  --  "lewis6991/gitsigns.nvim",
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim"
-  --   },
-  --   enabled = true,
-  --   lazy = false,
-  --   version = "*"
-  -- },
   {
     "L3MON4D3/LuaSnip",
     enabled = true,
@@ -323,7 +316,7 @@ local plugins = {
     "folke/todo-comments.nvim",
     cmd = { "TodoTrouble", "TodoTelescope" },
     enabled = true,
-    lazy = false,
+    lazy = true,
     keys = {
       {
         "<leader>s]",
@@ -482,6 +475,8 @@ local plugins = {
       "antoinemadec/FixCursorHold.nvim",
       "haydenmeade/neotest-jest",
     },
+    enabled = true,
+    lazy = true,
     keys = {
       {
         "<leader>tl",
@@ -632,7 +627,8 @@ local plugins = {
   },
   {
     "mfussenegger/nvim-lint",
-    event = "VeryLazy",
+    enabled = true,
+    lazy = false,
     config = function()
       require "custom.configs.nvim-lint"
     end,
@@ -653,6 +649,7 @@ local plugins = {
   },
   {
     "MunifTanjim/eslint.nvim",
+    enabled = true,
     config = function(_, opts)
       require "custom.configs.eslint"
     end,
@@ -660,6 +657,7 @@ local plugins = {
   {
     "MattesGroeger/vim-bookmarks",
     enabled = true,
+    lazy = true,
     keys = {
       {
         "<leader>mm",
@@ -723,11 +721,19 @@ local plugins = {
       }
     end,
     enabled = true,
-    lazy = false,
+    lazy = true,
     dependencies = {
       "MunifTanjim/nui.nvim",
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope.nvim",
+    },
+    keys = {
+      {
+        "<leader>ci",
+        "<cmd>:ChatGPT<CR>",
+        desc = "ChatGPT",
+        mode = "n",
+      },
     },
   },
   {
@@ -745,7 +751,7 @@ local plugins = {
   {
     "nvim-pack/nvim-spectre",
     enabled = true,
-    lazy = false,
+    lazy = true,
     keys = {
       { "<leader>se", '<cmd>lua require("spectre").toggle()<CR>', desc = "Toggle Spectre" },
       {
@@ -768,10 +774,48 @@ local plugins = {
   },
   {
     "tpope/vim-fugitive",
-    lazy = false,
+    lazy = true,
     enabled = true,
   },
-  { "akinsho/git-conflict.nvim", version = "*", config = true, lazy = false, enabled = true },
+  {
+    "akinsho/git-conflict.nvim",
+    version = "*",
+    config = true,
+    lazy = true,
+    enabled = true,
+    keys = {
+      {
+        "<leader>go",
+        ":GitConflictChooseOurs<CR>",
+        mode = "n",
+        desc = "Git conflict choose ours",
+      },
+      {
+        "<leader>gt",
+        ":GitConflictChooseTheirs<CR>",
+        mode = "n",
+        desc = "Git conflict choose theirs",
+      },
+      {
+        "<leader>gb",
+        ":GitConflictChooseBoth<CR>",
+        mode = "n",
+        desc = "Git conflict choose both",
+      },
+      {
+        "<leader>gn",
+        ":GitConflictNextConflict<CR>",
+        mode = "n",
+        desc = "Git conflict choose next conflict",
+      },
+      {
+        "<leader>gp",
+        ":GitConflictPrevConflict<CR>",
+        mode = "n",
+        desc = "Git conflict choose prev conflict",
+      },
+    },
+  },
 }
 
 return plugins
