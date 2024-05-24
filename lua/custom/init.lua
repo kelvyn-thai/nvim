@@ -15,5 +15,5 @@
 -- vim.g.lua_snippets_path = vim.fn.stdpath "config" .. "/lua/custom/lua_snippets"
 --
 
-vim.opt.spelllang = "en_us"
-vim.opt.spell = true
+-- vim.opt.spelllang = "en_us"
+-- vim.opt.spell = true

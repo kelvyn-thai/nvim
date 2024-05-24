@@ -7,14 +7,6 @@ local plugins = {
   },
   {
     "neovim/nvim-lspconfig",
-    dependencies = {
-      {
-        "jose-elias-alvarez/null-ls.nvim",
-        config = function()
-          require "custom.configs.null-ls"
-        end,
-      },
-    },
     config = function()
       require "plugins.configs.lspconfig"
       require "custom.configs.lspconfig"
@@ -37,8 +29,6 @@ local plugins = {
 
   {
     "nvim-tree/nvim-tree.lua",
-    enabled = true,
-    lazy = true,
     opts = overrides.nvimtree,
   },
 
@@ -254,6 +244,14 @@ local plugins = {
       on_attach = function(buffer)
         local gs = package.loaded.gitsigns
 
+        -- Autocommand to toggle line blame on cursor move
+        vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+          buffer = buffer,
+          callback = function()
+            -- Toggle the current line blame
+            gs.toggle_current_line_blame()
+          end,
+        })
         local function map(mode, l, r, desc)
           vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc })
         end
@@ -471,9 +469,11 @@ local plugins = {
   {
     "nvim-neotest/neotest",
     dependencies = {
+      "nvim-neotest/nvim-nio",
       "nvim-lua/plenary.nvim",
       "antoinemadec/FixCursorHold.nvim",
-      "haydenmeade/neotest-jest",
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-neotest/neotest-jest",
     },
     enabled = true,
     lazy = true,
@@ -582,20 +582,6 @@ local plugins = {
         "yaml",
         "lua",
       },
-      ["null-ls"] = {
-        condition = function()
-          local prettier = require "prettier"
-          return prettier.config_exists {
-            -- if `false`, skips checking `package.json` for `"prettier"` key
-            check_package_json = true,
-          }
-        end,
-        runtime_condition = function()
-          -- return false to skip running prettier
-          return true
-        end,
-        timeout = 5000,
-      },
       cli_options = {
         arrow_parens = "always",
         bracket_spacing = true,
@@ -604,7 +590,7 @@ local plugins = {
         end_of_line = "lf",
         html_whitespace_sensitivity = "css",
         -- jsx_bracket_same_line = false,
-        jsx_single_quote = false,
+        jsx_single_quote = true,
         print_width = 80,
         prose_wrap = "preserve",
         quote_props = "as-needed",
@@ -627,8 +613,7 @@ local plugins = {
   },
   {
     "mfussenegger/nvim-lint",
-    enabled = true,
-    lazy = false,
+    event = "VeryLazy",
     config = function()
       require "custom.configs.nvim-lint"
     end,
@@ -649,7 +634,6 @@ local plugins = {
   },
   {
     "MunifTanjim/eslint.nvim",
-    enabled = true,
     config = function(_, opts)
       require "custom.configs.eslint"
     end,
@@ -814,7 +798,32 @@ local plugins = {
         mode = "n",
         desc = "Git conflict choose prev conflict",
       },
+      {
+        "<leader>gr",
+        ":GitConflictRefresh<CR>",
+        mode = "n",
+        desc = "Git conflict refresh",
+      },
+      {
+        "<leader>gq",
+        ":GitConflictListQf<CR>",
+        mode = "n",
+        desc = "Git conflict quick fix list",
+      },
     },
+  },
+  {
+    "jose-elias-alvarez/null-ls.nvim",
+    enabled = true,
+    lazy = false,
+    config = function()
+      require "custom.configs.null-ls"
+    end,
+  },
+  {
+    "kamykn/spelunker.vim",
+    enabled = true,
+    lazy = false,
   },
 }
 
