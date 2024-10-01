@@ -10,10 +10,14 @@ local lsp_config = require "lspconfig"
 -- if you just want default config for the servers then put them in a table
 local servers = {
   "html",
+  "cssls",
+  "ts_ls",
+  "clangd",
   "jsonls",
   "eslint",
   "tailwindcss",
-  "ts_ls",
+  "dockerls",
+  "docker_compose_language_service",
 }
 
 for _, lsp in ipairs(servers) do

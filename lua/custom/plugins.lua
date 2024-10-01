@@ -222,11 +222,12 @@ local plugins = {
   },
   {
     "JoosepAlviste/nvim-ts-context-commentstring",
-    lazy = true,
+    lazy = false,
     enabled = true,
     opts = {
       enable_aptocmd = false,
     },
+    after = "nvim-treesitter",
   },
   {
     "lewis6991/gitsigns.nvim",
@@ -569,7 +570,7 @@ local plugins = {
       bin = "prettierd", -- or `'prettierd'` (v0.23.3+)
       filetypes = {
         "css",
-        "graphql",
+        -- "graphql",
         "html",
         "javascript",
         "javascriptreact",
@@ -824,6 +825,16 @@ local plugins = {
     "kamykn/spelunker.vim",
     enabled = true,
     lazy = false,
+  },
+  {
+    "numToStr/Comment.nvim",
+    lazy = false,
+    enabled = true,
+    config = function()
+      require("Comment").setup {
+        pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+      }
+    end,
   },
 }
 

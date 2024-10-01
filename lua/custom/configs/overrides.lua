@@ -4,17 +4,17 @@ M.treesitter = {
   ensure_installed = {
     "vim",
     "lua",
-    "html",
-    "css",
+    -- "html",
+    -- "css",
     "javascript",
     "typescript",
     "tsx",
-    "c",
-    "markdown",
-    "markdown_inline",
+    -- "c",
+    -- "markdown",
+    -- "markdown_inline",
     "json",
-    "json5",
-    "jsonc",
+    -- "json5",
+    -- "jsonc",
   },
   indent = {
     enable = true,
@@ -27,23 +27,23 @@ M.treesitter = {
 M.mason = {
   ensure_installed = {
     -- lua stuff
-    "lua-language-server",
-    "stylua",
+    -- "lua-language-server",
+    -- "stylua",
 
     -- web dev stuff
-    "css-lsp",
-    "html-lsp",
+    -- "css-lsp",
+    -- "html-lsp",
     "typescript-language-server",
-    "deno",
+    -- "deno",
     "prettier",
-    "tailwindcss-language-server",
+    -- "tailwindcss-language-server",
     "eslint-lsp",
 
     -- c/cpp stuff
-    "clangd",
-    "clang-format",
+    -- "clangd",
+    -- "clang-format",
 
-    "dockerfile-language-server",
+    -- "dockerfile-language-server",
   },
   PATH = "prepend",
 }
