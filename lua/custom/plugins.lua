@@ -12,8 +12,6 @@ local plugins = {
       require "custom.configs.lspconfig"
     end, -- Override to setup mason-lspconfig
   },
-
-  -- mason.nvim
   {
     "williamboman/mason.nvim",
     opts = overrides.mason,
@@ -59,18 +57,11 @@ local plugins = {
     lazy = true,
   },
   -- To make a plugin not be loaded
-  -- {
-  --   "NvChad/nvim-colorizer.lua",
-  --   enabled = false
-  -- },
+  {
+    "NvChad/nvim-colorizer.lua",
+    enabled = true,
+  },
 
-  -- All NvChad plugins are lazy-loaded by default
-  -- For a plugin to be loaded, you will need to set either `ft`, `cmd`, `keys`, `event`, or set `lazy = false`
-  -- If you want a plugin to load on startup, add `lazy = false` to a plugin spec, for example
-  -- {
-  --   "mg979/vim-visual-multi",
-  --   lazy = false,
-  -- }
   {
     "majutsushi/tagbar",
     enabled = true,
@@ -621,6 +612,8 @@ local plugins = {
   },
   {
     "mfussenegger/nvim-dap",
+    lazy = false,
+    enabled = true,
   },
   {
     "vim-airline/vim-airline",
@@ -759,7 +752,7 @@ local plugins = {
   },
   {
     "tpope/vim-fugitive",
-    lazy = true,
+    lazy = false,
     enabled = true,
   },
   {
