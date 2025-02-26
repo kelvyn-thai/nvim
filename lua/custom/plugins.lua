@@ -699,18 +699,34 @@ local plugins = {
       }
     end,
     enabled = true,
-    lazy = true,
+    lazy = false,
     dependencies = {
       "MunifTanjim/nui.nvim",
       "nvim-lua/plenary.nvim",
+      "folke/trouble.nvim", -- optional
       "nvim-telescope/telescope.nvim",
     },
     keys = {
+      -- Core ChatGPT commands
+      { "<leader>ci", "<cmd>ChatGPT<CR>", desc = "Open ChatGPT", mode = "n" },
+      { "<leader>ce", "<cmd>ChatGPTEditWithInstruction<CR>", desc = "Edit with ChatGPT", mode = { "n", "v" } },
+
+      -- Code enhancements
+      { "<leader>cg", "<cmd>ChatGPTRun grammar_correction<CR>", desc = "Grammar Correction", mode = { "n", "v" } },
+      { "<leader>ct", "<cmd>ChatGPTRun translate<CR>", desc = "Translate Text", mode = { "n", "v" } },
+      { "<leader>ck", "<cmd>ChatGPTRun keywords<CR>", desc = "Extract Keywords", mode = { "n", "v" } },
+      { "<leader>cd", "<cmd>ChatGPTRun docstring<CR>", desc = "Generate Docstring", mode = { "n", "v" } },
+      { "<leader>ca", "<cmd>ChatGPTRun add_tests<CR>", desc = "Add Tests", mode = { "n", "v" } },
+      { "<leader>co", "<cmd>ChatGPTRun optimize_code<CR>", desc = "Optimize Code", mode = { "n", "v" } },
+      { "<leader>cf", "<cmd>ChatGPTRun fix_bugs<CR>", desc = "Fix Bugs", mode = { "n", "v" } },
+      { "<leader>cx", "<cmd>ChatGPTRun explain_code<CR>", desc = "Explain Code", mode = { "n", "v" } },
+      { "<leader>cs", "<cmd>ChatGPTRun summarize<CR>", desc = "Summarize Content", mode = { "n", "v" } },
+      { "<leader>cr", "<cmd>ChatGPTRun roxygen_edit<CR>", desc = "Roxygen Edit (R Code)", mode = { "n", "v" } },
       {
-        "<leader>ci",
-        "<cmd>:ChatGPT<CR>",
-        desc = "ChatGPT",
-        mode = "n",
+        "<leader>cl",
+        "<cmd>ChatGPTRun code_readability_analysis<CR>",
+        desc = "Analyze Code Readability",
+        mode = { "n", "v" },
       },
     },
   },
