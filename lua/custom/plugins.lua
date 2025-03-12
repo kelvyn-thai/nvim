@@ -628,6 +628,8 @@ local plugins = {
   },
   {
     "MunifTanjim/eslint.nvim",
+    enabled = true,
+    lazy = false,
     config = function(_, opts)
       require "custom.configs.eslint"
     end,
@@ -843,6 +845,47 @@ local plugins = {
       require("Comment").setup {
         pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
       }
+    end,
+  },
+
+  -- Only load whichkey after all the gui
+  {
+    "folke/which-key.nvim",
+    keys = { "<leader>", "<c-r>", "<c-w>", '"', "'", "`", "c", "v", "g" },
+    init = function()
+      require("core.utils").load_mappings "whichkey"
+    end,
+    cmd = "WhichKey",
+    config = function(_, opts)
+      dofile(vim.g.base46_cache .. "whichkey")
+      require("which-key").setup(opts)
+    end,
+  }, -- Auto-close and rename HTML/JSX tags
+  { "windwp/nvim-ts-autotag", lazy = false, enable = true, config = true },
+
+  -- Emmet for fast HTML generation
+  {
+    "mattn/emmet-vim",
+    lazy = false,
+    enabled = true,
+    config = function()
+      vim.g.user_emmet_leader_key = "<C-Y>"
+
+      -- Manually remap Emmet expansion
+      vim.api.nvim_set_keymap("i", "<C-Y>,", "<Plug>(emmet-expand-abbr)", { noremap = true, silent = true })
+    end,
+    ft = { "html", "css", "javascriptreact", "typescriptreact" },
+  },
+  -- Auto-close tags
+  {
+    "alvan/vim-closetag",
+    lazy = false,
+    enable = true,
+    ft = { "html", "javascriptreact", "typescriptreact" },
+    config = function()
+      vim.g.closetag_filenames = "*.html,*.js,*.jsx,*.ts,*.tsx"
+      vim.g.closetag_xhtml_filenames = "*.jsx,*.tsx"
+      vim.g.closetag_enable_react_fragment = 1
     end,
   },
 }

@@ -19,11 +19,16 @@ local servers = {
   "dockerls",
   "docker_compose_language_service",
   "yamlls",
+  "vtsls",
 }
 
 for _, lsp in ipairs(servers) do
-  lsp_config[lsp].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-  }
+  if lsp_config[lsp] then
+    lsp_config[lsp].setup {
+      on_attach = on_attach,
+      capabilities = capabilities,
+    }
+  else
+    print("Warning: LSP server " .. lsp .. " is not available.")
+  end
 end
