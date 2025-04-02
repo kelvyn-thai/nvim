@@ -7,8 +7,6 @@ local async = event == "BufWritePost"
 --
 local sources = {
   b.formatting.stylua,
-  -- b.diagnostics.eslint,
-  -- b.completion.spell,
   b.formatting.prettierd,
 }
 

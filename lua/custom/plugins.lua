@@ -79,137 +79,49 @@ local plugins = {
   },
   {
     "L3MON4D3/LuaSnip",
-    enabled = true,
-    lazy = true,
-    dependencies = "rafamadriz/friendly-snippets",
-    -- follow latest release.
-    version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
-    -- install jsregexp (optional!).
-    build = "make install_jsregexp",
-    config = function()
-      require "custom.snippets.greeting"
-      local ls = require "luasnip"
-      local set = vim.keymap.set
-      set({ "i" }, "<C-K>", function()
-        ls.expand()
-      end, { silent = true })
-      set({ "i", "s" }, "<C-L>", function()
-        ls.jump(1)
-      end, { silent = true })
-      set({ "i", "s" }, "<C-J>", function()
-        ls.jump(-1)
-      end, { silent = true })
-      set({ "i", "s" }, "<C-E>", function()
-        if ls.choice_active() then
-          ls.change_choice(1)
-        end
-      end, { silent = true })
-    end,
-    -- config = luaSnipFn
+    opts = {
+      history = true,
+      delete_check_events = "TextChanged",
+    },
   },
   {
     "rafamadriz/friendly-snippets",
-    enabled = true,
-    lazy = true,
     config = function()
       require("luasnip.loaders.from_vscode").lazy_load()
-    end,
-  },
-  {
-    "hrsh7th/nvim-cmp",
-    version = "*", -- last release is way too old
-    event = "InsertEnter",
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
-      "saadparwaiz1/cmp_luasnip",
-      { "roobert/tailwindcss-colorizer-cmp.nvim", config = true },
-    },
-    opts = function()
-      vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
-      local cmp = require "cmp"
-      local defaults = require "cmp.config.default"()
-      return {
-        completion = {
-          completeopt = "menu,menuone,noinsert",
-        },
-        snippet = {
-          expand = function(args)
-            require("luasnip").lsp_expand(args.body)
-          end,
-        },
-        mapping = cmp.mapping.preset.insert {
-          ["<C-n>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Insert },
-          ["<C-p>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Insert },
-          ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-          ["<C-f>"] = cmp.mapping.scroll_docs(4),
-          ["<C-Space>"] = cmp.mapping.complete(),
-          ["<C-e>"] = cmp.mapping.abort(),
-          ["<CR>"] = cmp.mapping.confirm { select = true }, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-          ["<S-CR>"] = cmp.mapping.confirm {
-            behavior = cmp.ConfirmBehavior.Replace,
-            select = true,
-          }, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-          ["<C-CR>"] = function(fallback)
-            cmp.abort()
-            fallback()
-          end,
-          ["<Tab>"] = function(fallback)
-            if cmp.visible() then
-              cmp.select_next_item()
-            else
-              fallback()
-            end
-          end,
-          ["<S-Tab>"] = function(fallback)
-            if cmp.visible() then
-              cmp.select_prev_item()
-            else
-              fallback()
-            end
-          end,
-        },
-        sources = cmp.config.sources({
-          { name = "nvim_lsp" },
-          { name = "luasnip" },
-          { name = "path" },
-        }, {
-          { name = "buffer" },
-        }),
-        formatting = {
-          fields = { "kind", "abbr", "menu" },
-          format = function(entry, vim_item)
-            require("tailwindcss-colorizer-cmp").formatter(entry, vim_item)
-            local icons = require "custom.icons.index"
-            local kinds = icons.kinds
-            -- Kind icons
-            vim_item.kind = string.format("%s", kinds[vim_item.kind])
-            -- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
-            vim_item.menu = ({
-              nvim_lsp = "[LSP]",
-              luasnip = "[Snippet]",
-              buffer = "[Buffer]",
-              path = "[Path]",
-            })[entry.source.name]
-            return vim_item
-          end,
-        },
-        experimental = {
-          ghost_text = {
-            hl_group = "CmpGhostText",
-          },
-        },
-        sorting = defaults.sorting,
+      require("luasnip.loaders.from_lua").load {
+        paths = vim.fn.stdpath "config" .. "/lua/custom/snippets",
       }
     end,
-    ---@param opts cmp.ConfigSchema
-    config = function(_, opts)
-      for _, source in ipairs(opts.sources) do
-        source.group_index = source.group_index or 1
-      end
-      require("cmp").setup(opts)
+  },
+  { "saadparwaiz1/cmp_luasnip", opts = nil },
+
+  {
+    "hrsh7th/nvim-cmp",
+    optional = true,
+    dependencies = { "saadparwaiz1/cmp_luasnip" },
+    opts = function(_, opts)
+      opts.snippet = {
+        expand = function(args)
+          require("luasnip").lsp_expand(args.body)
+        end,
+      }
+      table.insert(opts.sources, { name = "luasnip" })
     end,
+  -- stylua: ignore
+  keys = {
+    { "<tab>", function() require("luasnip").jump(1) end, mode = "s" },
+    { "<s-tab>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
+  },
+  },
+
+  {
+    "saghen/blink.cmp",
+    optional = true,
+    opts = {
+      snippets = {
+        preset = "luasnip",
+      },
+    },
   },
   {
     "JoosepAlviste/nvim-ts-context-commentstring",
@@ -610,11 +522,67 @@ local plugins = {
       require "custom.configs.nvim-lint"
     end,
   },
-  {
-    "mfussenegger/nvim-dap",
-    lazy = false,
-    enabled = true,
-  },
+  -- {
+  --   "mfussenegger/nvim-dap",
+  --   lazy = false,
+  --   enabled = true,
+  --   dependencies = {
+  --     "rcarriga/nvim-dap-ui",
+  --     "theHamsta/nvim-dap-virtual-text",
+  --   },
+  --   config = function()
+  --     local dap = require "dap"
+  --     local dapui = require "dapui"
+  --     local port = "9229"
+  --
+  --     dap.adapters["pwa-node"] = {
+  --       type = "server",
+  --       host = "localhost",
+  --       port = port,
+  --       executable = {
+  --         command = "node",
+  --         -- 💀 Make sure to update this path to point to your installation
+  --         args = { "/Users/phatthainguyenhoang/.config/vscode-js-debug/src/dapDebugServer.js", port },
+  --       },
+  --     }
+  --
+  --     require("dap").configurations.javascript = {
+  --       {
+  --         type = "pwa-node",
+  --         request = "launch",
+  --         name = "Launch file",
+  --         program = "${file}",
+  --         cwd = "${workspaceFolder}",
+  --       },
+  --     }
+  --
+  --     -- dap.configurations.javascript = dap.configurations.typescript
+  --     -- Setup Debug UI
+  --     require("dapui").setup()
+  --     require("nvim-dap-virtual-text").setup()
+  --   end,
+  --   keys = {
+  --     { "<leader>td", "<cmd>lua require('dap').continue()<cr>", mode = "n", desc = "Debug: Continue" },
+  --     { "<leader>tn", "<cmd>lua require('dap').step_over()<cr>", mode = "n", desc = "Debug: Step Over" },
+  --     { "<leader>ti", "<cmd>lua require('dap').step_into()<cr>", mode = "n", desc = "Debug: Step Into" },
+  --     { "<leader>tO", "<cmd>lua require('dap').step_out()<cr>", mode = "n", desc = "Debug: Step Out" },
+  --     {
+  --       "<leader>tb",
+  --       "<cmd>lua require('dap').toggle_breakpoint()<cr>",
+  --       mode = "n",
+  --       desc = "Debug: Toggle Breakpoint",
+  --     },
+  --     {
+  --       "<leader>tB",
+  --       "<cmd>lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '))<cr>",
+  --       mode = "n",
+  --       desc = "Debug: Set Conditional Breakpoint",
+  --     },
+  --     { "<leader>tR", "<cmd>lua require('dap').repl.open()<cr>", mode = "n", desc = "Debug: Open REPL" },
+  --     { "<leader>tq", "<cmd>lua require('dap').terminate()<cr>", mode = "n", desc = "Debug: Stop" },
+  --     { "<leader>tu", "<cmd>lua require('dapui').toggle()<cr>", mode = "n", desc = "Debug: Toggle UI" },
+  --   },
+  -- },
   {
     "vim-airline/vim-airline",
   },
